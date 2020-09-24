@@ -1,34 +1,59 @@
+const Card = require('../models/card');
 
-const  mockedCards = [
-    {
-        id: 1,
-        title: 'Este es un titulo 1',
-        content: 'Esto es contenido',
-        // ...
-    },
-    {
-        id: 2,
-        title: 'Este es un titulo 2',
-        content: 'Esto es contenido',
-        // ...
-    },
-    {
-        id: 3,
-        title: 'Este es un titulo 3',
-        content: 'Esto es contenido',
-        // ...
-    },
-    {
-        id: 4,
-        title: 'Este es un titulo 4',
-        content: 'Esto es contenido',
-        // ...
-    },
-]
+exports.getCards = async (req, res, next) =>{
+    try {
+        const cards = await Card.find();
+        res.status(200).json({
+            cards: cards
+        });
+    } catch (error) {
+        console.log(error);
+    }
+}
 
+exports.createCard = async (req, res, next) =>{
+    const title = req.body.title;
+    const content = req.body.content;
 
-exports.getCards = (req, res, next) =>{
-    console.log(mockedCards);
-    return res.status(200).json({ mockedCards});
+    const card = new Card({
+        title: title,
+        content: content
+    });
+
+    try {
+        await card.save();
+        res.status(201).json({
+            message: 'Card create',
+            card: card
+        });
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+exports.updateCard = async (req, res, next) => {
+    const cardId = req.body.id;
+    const title = req.body.title;
+    const content = req.body.content;
+
+    try {
+        const card = await Card.findById(cardId);
+        if(!card){
+            res.status(500).json({
+                message: 'card not found',
+            });
+        }
+        card.title = title;
+        card.content =content;
+        await card.save();
+        res.status(200).json({
+            message: 'Card updated!',
+            card: card
+        })
+    } catch (error) {
+        res.status(500).json({
+            message: 'An error occurred'
+        });
+    }
 }
 

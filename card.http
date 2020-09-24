@@ -1,0 +1,9 @@
+GET http://localhost:3000/cards
+
+###
+
+POST http://localhost:3000/card
+{
+    "title": "un titulo",
+    "content": "sdfiosdfniosdf"
+}
