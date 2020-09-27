@@ -7,4 +7,5 @@ router.post('/card', cardController.createCard);
 
 router.put('/card/:id', cardController.updateCard);
 
+router.delete('/card/:id', cardController.deleteCard);
 module.exports = router;

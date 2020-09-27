@@ -57,3 +57,18 @@ exports.updateCard = async (req, res, next) => {
     }
 }
 
+exports.deleteCard = async (req, res, next) => {
+    const cardId = req.body.id;
+    try {
+        await Card.findByIdAndDelete(cardId);
+        res.status(200).json({
+            message:'Card successfully deleted!'
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            message: 'An error occurred'
+        });
+    }
+}
+
