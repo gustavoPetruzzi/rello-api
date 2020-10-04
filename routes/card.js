@@ -1,11 +1,13 @@
 const router = require('express').Router();
 const cardController = require('../controller/card');
+const isAuth = require('../middleware/is-auth');
 
-router.get('/cards', cardController.getCards);
+router.get('/cards', isAuth, cardController.getCards);
 
-router.post('/card', cardController.createCard);
+router.post('/card', isAuth, cardController.createCard);
 
-router.put('/card/:id', cardController.updateCard);
+router.put('/card/:id', isAuth, cardController.updateCard);
 
-router.delete('/card/:id', cardController.deleteCard);
+router.delete('/card/:id', isAuth,  cardController.deleteCard);
+
 module.exports = router;

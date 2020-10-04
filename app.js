@@ -2,21 +2,9 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const cardRoutes = require('./routes/card');
-const session = require('express-session');
-const MongoDbStore = require('connect-mongodb-session')(session);
-
-// const store = new MongoDbStore({
-//     uri: 'mongodb+srv://yusti:y1161544761c@cluster0.ej3hr.mongodb.net/shop?retryWrites=true&w=majority',
-//     collection: 'sessions'
-// });
+const authRoutes = require('./routes/auth');
 const app = express();
 app.use(bodyParser.urlencoded({extended: false}));
-// app.use(session({
-//     secret: 'my secret',
-//     resave: false,
-//     saveUninitialized: false,
-//     store: store
-// }));
 app.use((req,res, next) =>{
     res.setHeader('Access-Control-Allow-Origin',  '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE');
@@ -24,7 +12,19 @@ app.use((req,res, next) =>{
     next();
 })
 
-app.use(cardRoutes);
+app.use('/board',cardRoutes);
+app.use('/auth', authRoutes);
+
+app.use( (error, req, res, next) => {
+    console.log(error);
+    const status = error.statusCode || 500;
+    const message = error.message;
+    const data = error.data;
+    res.status(status).json({
+        message: message,
+        data: data
+    });
+})
 
 mongoose
     .connect(

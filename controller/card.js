@@ -7,7 +7,9 @@ exports.getCards = async (req, res, next) =>{
             cards: cards
         });
     } catch (error) {
-        console.log(error);
+        if(!error.statusCode){
+            error.statusCode = 500;
+        }
     }
 }
 
@@ -27,7 +29,9 @@ exports.createCard = async (req, res, next) =>{
             card: card
         });
     } catch (error) {
-        console.log(error);
+        if (!error.statusCode) {
+            error.statusCode = 500;
+        }
     }
 };
 
@@ -51,9 +55,10 @@ exports.updateCard = async (req, res, next) => {
             card: card
         })
     } catch (error) {
-        res.status(500).json({
-            message: 'An error occurred'
-        });
+        if(!error.statusCode) {
+            error.statusCode = 500;
+        }
+        next(error);
     }
 }
 
@@ -65,10 +70,9 @@ exports.deleteCard = async (req, res, next) => {
             message:'Card successfully deleted!'
         });
     } catch (error) {
-        console.log(error);
-        res.status(500).json({
-            message: 'An error occurred'
-        });
+        if(!error.statusCode) {
+            error.statusCode = 500;
+        }
     }
 }
 
