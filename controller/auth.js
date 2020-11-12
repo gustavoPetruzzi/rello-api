@@ -12,17 +12,24 @@ exports.signup = async (req, res, next) =>{
     }
     const email = req.body.email;
     const name = req.body.name;
+    const lastName = req.body.lastName;
     const password = req.body.password;
     
 
     try {
+        const user = await User.findAll({ where: email });
+        if (user) {
+            const error = new Error('email already registered');
+            error.statusCode = 409;
+            throw error;
+        }
         const hashedPassword = await bcrypt.hash(password, 12);
-        const user = new User({
-            email: email,
-            name: name,
-            password: hashedPassword
-        });
-        await user.save();
+        await User.create({
+            email,
+            name,
+            password: hashedPassword,
+            lastName,
+        })
         res.status(201).json({
             message: 'User created!',
         });

@@ -1,9 +1,18 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
+
+//MODELS
+const User = require('./models/user');
+const Card = require('./models/card');
+const Column = require('./models/column');
+const Board = require('./models/board');
+
+// ROUTES
 const cardRoutes = require('./routes/card');
 const authRoutes = require('./routes/auth');
+
 const app = express();
+const sequelize = require('./utils/database');
 app.use(bodyParser.urlencoded({extended: false}));
 app.use((req,res, next) =>{
     res.setHeader('Access-Control-Allow-Origin',  '*');
@@ -11,6 +20,8 @@ app.use((req,res, next) =>{
     res.setHeader('Access-Control-Allow-Headers', '*');
     next();
 })
+
+
 
 app.use('/board',cardRoutes);
 app.use('/auth', authRoutes);
@@ -26,17 +37,26 @@ app.use( (error, req, res, next) => {
     });
 })
 
-mongoose
-    .connect(
-        'mongodb+srv://yusti:y1161544761c@cluster0.ej3hr.mongodb.net/rello?retryWrites=true&w=majority',
-        { 
-            useNewUrlParser: true,
-            useUnifiedTopology: true, 
-        }
-    )
-    .then(() =>{
-        app.listen(3000,() =>{
-            console.log('App running!');
-        })
-    })
-    .catch(err =>console.log("mongo error", err));
+
+Column.hasMany(Card);
+Board.hasMany(Column);
+User.hasMany(Board);
+
+sequelize.sync()
+.then( () => console.log('se conecto'))
+.catch( (error) => console.log('che, se rompio esto', error));
+
+// mongoose
+//     .connect(
+//         'mongodb+srv://yusti:y1161544761c@cluster0.ej3hr.mongodb.net/rello?retryWrites=true&w=majority',
+//         { 
+//             useNewUrlParser: true,
+//             useUnifiedTopology: true, 
+//         }
+//     )
+//     .then(() =>{
+//         app.listen(3000,() =>{
+//             console.log('App running!');
+//         })
+//     })
+//     .catch(err =>console.log("mongo error", err));

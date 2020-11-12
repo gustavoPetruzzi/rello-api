@@ -1,24 +1,51 @@
-const mongoose = require('mongoose');
+const Sequelize = require('sequelize');
 
-const Schema = mongoose.Schema;
+const sequelize = require('../utils/database');
 
-const cardSchema = new Schema({
+const Card = sequelize.define('card', {
+    id: {
+        type: Sequelize.INTEGER,
+        autoIncrement: true,
+        allowNull: false,
+        primaryKey: true,
+    },
     title: {
-        type: String,
-        required: true
+        type: Sequelize.STRING,
+        allowNull: false,
     },
     content: {
-        type: String,
-        required: true
+        type: Sequelize.STRING,
+        allowNull: false,
     },
-    // userOwner:{
-    //     type: Schema.Types.ObjectId,
-    //     ref: 'User',
-    //     required: true
-    // }
+    image: {
+        type: Sequelize.STRING,
+        allowNull: true,
+    }
 });
 
-module.exports = mongoose.model('Card', cardSchema);
+module.exports = Card;
+
+// const mongoose = require('mongoose');
+
+// const Schema = mongoose.Schema;
+
+// const cardSchema = new Schema({
+//     title: {
+//         type: String,
+//         required: true
+//     },
+//     content: {
+//         type: String,
+//         required: true
+//     },
+//     // userOwner:{
+//     //     type: Schema.Types.ObjectId,
+//     //     ref: 'User',
+//     //     required: true
+//     // }
+// });
+
+// module.exports = mongoose.model('Card', cardSchema);
 
 // export interface Card{
 //     id: string;
