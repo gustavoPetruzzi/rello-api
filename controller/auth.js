@@ -1,43 +1,43 @@
 const User = require('../models/user');
 const { validationResult } = require('express-validator/check');
 const bcrypt = require('bcryptjs');
-
+const handleError = require('../utils/error-handler');
+const jwt = require('jsonwebtoken');
 exports.signup = async (req, res, next) =>{
     const errors = validationResult(req);
-    if(!errors.isEmpty()){
-        const error = new Error('Validation failed');
-        error.statusCode = 422;
-        error.data = errors.array();
-        throw error;
-    }
     const email = req.body.email;
     const name = req.body.name;
     const lastName = req.body.lastName;
     const password = req.body.password;
-    
-
     try {
-        const user = await User.findAll({ where: email });
+        if(!errors.isEmpty()){
+            const error = new Error('Validation failed');
+            error.statusCode = 422;
+            error.data = errors.array();
+            throw error;
+        }
+        const user = await User.findOne({
+            where: {
+                email: email
+            } 
+        });
         if (user) {
-            const error = new Error('email already registered');
+            const error = new Error('Email already registered');
             error.statusCode = 409;
             throw error;
         }
         const hashedPassword = await bcrypt.hash(password, 12);
         await User.create({
             email,
-            name,
             password: hashedPassword,
-            lastName,
+            name,
+            lastName
         })
-        res.status(201).json({
+        return res.status(201).json({
             message: 'User created!',
         });
     } catch (error) {
-        if(!error.statusCode){
-            error.statusCode = 500;
-        }
-        next(error);
+        return handleError(res, error);
     }
 }
 
@@ -46,7 +46,11 @@ exports.login = async (req, res, next) => {
     const password = req.body.password;
     let loadedUser;
     try{
-        const user = await User.findOne({ email: email })
+        const user = await User.findOne({
+            where: {
+                email
+            }
+        })
         if(!user) {
             const error = new Error('User not found');
             error.statusCode = 401;
@@ -62,16 +66,15 @@ exports.login = async (req, res, next) => {
         const token = jwt.sign(
             {
                 email: loadedUser.email,
-                userId: loadedUser._id.toString()
+                userId: loadedUser.id.toString()
             },
             'secret',
             { expiresIn: '1h'}
         )
-        res.status(200).json({
+        return res.status(200).json({
             token: token,
-            userId: loadedUser._id.toString()
+            userId: loadedUser.id.toString()
         });
-        return;
     } catch(error) {
         if(!error.statusCode){
             error.statusCode = 500;

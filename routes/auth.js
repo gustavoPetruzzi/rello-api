@@ -28,7 +28,11 @@ router.post(
         body('name')
             .trim()
             .not()
-            .isEmpty()
+            .isEmpty(),
+        body('lastName')
+            .trim()
+            .not()
+            .isEmpty(),
     ],
     authController.signup
 )

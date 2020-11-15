@@ -13,7 +13,7 @@ const authRoutes = require('./routes/auth');
 
 const app = express();
 const sequelize = require('./utils/database');
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json());
 app.use((req,res, next) =>{
     res.setHeader('Access-Control-Allow-Origin',  '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE');
@@ -27,7 +27,6 @@ app.use('/board',cardRoutes);
 app.use('/auth', authRoutes);
 
 app.use( (error, req, res, next) => {
-    console.log(error);
     const status = error.statusCode || 500;
     const message = error.message;
     const data = error.data;
@@ -43,9 +42,13 @@ Board.hasMany(Column);
 User.hasMany(Board);
 
 sequelize.sync()
-.then( () => console.log('se conecto'))
-.catch( (error) => console.log('che, se rompio esto', error));
+    .then( () => {
+        console.log('se conecto');
+        return app.listen(3000);
+    })
+    .catch( (error) => console.log('che, se rompio esto', error));
 
+module.exports = app;
 // mongoose
 //     .connect(
 //         'mongodb+srv://yusti:y1161544761c@cluster0.ej3hr.mongodb.net/rello?retryWrites=true&w=majority',
