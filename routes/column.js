@@ -1,3 +1,7 @@
-const mongooser = require('mongoose');
+const router = require("express").Router();
+const columnController = require("../controller/column");
+const isAuth = require("../middleware/is-auth");
 
-const
+router.post("/column", isAuth, columnController.createCard);
+
+router.put("");

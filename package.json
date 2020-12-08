@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "mocha --timeout 10000",
+    "test": "mocha --timeout 10000 --exit",
     "start": "nodemon app.js"
   },
   "author": "",
@@ -13,7 +13,8 @@
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
     "mocha": "^8.2.1",
-    "nodemon": "^2.0.4"
+    "nodemon": "^2.0.4",
+    "prettier": "2.1.2"
   },
   "dependencies": {
     "@types/sequelize": "^4.28.9",

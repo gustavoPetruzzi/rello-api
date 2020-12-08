@@ -1,26 +1,30 @@
-const Sequelize = require('sequelize');
+const Sequelize = require("sequelize");
 
-const sequelize = require('../utils/database');
+const sequelize = require("../utils/database");
 
-const Card = sequelize.define('card', {
-    id: {
-        type: Sequelize.INTEGER,
-        autoIncrement: true,
-        allowNull: false,
-        primaryKey: true,
-    },
-    title: {
-        type: Sequelize.STRING,
-        allowNull: false,
-    },
-    content: {
-        type: Sequelize.STRING,
-        allowNull: false,
-    },
-    image: {
-        type: Sequelize.STRING,
-        allowNull: true,
-    }
+const Card = sequelize.define("card", {
+  id: {
+    type: Sequelize.INTEGER,
+    autoIncrement: true,
+    allowNull: false,
+    primaryKey: true,
+  },
+  title: {
+    type: Sequelize.STRING,
+    allowNull: false,
+  },
+  content: {
+    type: Sequelize.STRING,
+    allowNull: true,
+  },
+  image: {
+    type: Sequelize.STRING,
+    allowNull: true,
+  },
+  deleted: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: false,
+  },
 });
 
 module.exports = Card;

@@ -1,17 +1,30 @@
-const Sequelize = require('sequelize');
+const Sequelize = require("sequelize");
 
-const sequelize = require('../utils/database');
+const sequelize = require("../utils/database");
+const User = require("./user");
 
-const Board = sequelize.define('board', {
-    id: {
-        type: Sequelize.INTEGER,
-        autoIncrement: true,
-        allowNull: false,
-        primaryKey: true,
+const Board = sequelize.define("board", {
+  id: {
+    type: Sequelize.INTEGER,
+    autoIncrement: true,
+    allowNull: false,
+    primaryKey: true,
+  },
+  name: {
+    type: Sequelize.STRING,
+  },
+  deleted: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: false,
+  },
+  userId: {
+    type: Sequelize.INTEGER,
+    references: {
+      model: User,
+      key: "id",
     },
-    name: {
-        type: Sequelize.STRING,
-    }
+    allowNull: false,
+  },
 });
 
 module.exports = Board;
@@ -31,4 +44,3 @@ module.exports = Board;
 // });
 
 // module.exports = mongoose.model('Board', boardSchema);
-
