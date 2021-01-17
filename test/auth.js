@@ -4,7 +4,7 @@ const expect = require("chai").expect;
 const AuthController = require("../controller/auth");
 const sequelize = require("../utils/database");
 const users = require("./dummy/dummy-users");
-describe("Auth Controller", function () {
+xdescribe("Auth Controller", function () {
   before(function (done) {
     sequelize
       .sync()

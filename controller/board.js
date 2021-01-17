@@ -69,7 +69,7 @@ exports.removeBoard = async (req, res, next) => {
       throw error;
     }
     board.deleted = true;
-    const algo = await board.save();
+    await board.save();
     return res.status(201).json({
       message: "Board deleted",
     });
@@ -91,7 +91,7 @@ exports.updateBoard = async (req, res, next) => {
       throw error;
     }
     const board = await Board.findByPk(boardId);
-    if (!board) {
+    if (!board || board.deleted) {
       const error = new Error("Board not found");
       error.statusCode = 401;
       throw error;

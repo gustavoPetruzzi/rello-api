@@ -1,6 +1,7 @@
 const Sequelize = require("sequelize");
 
 const sequelize = require("../utils/database");
+const Board = require('./board');
 
 const Column = sequelize.define("column", {
   id: {
@@ -16,6 +17,14 @@ const Column = sequelize.define("column", {
   deleted: {
     type: Sequelize.BOOLEAN,
     defaultValue: false,
+  },
+  boardId: {
+    type: Sequelize.INTEGER,
+    references: {
+      model: Board,
+      key: "id",
+    },
+    allowNull: false,
   },
 });
 
